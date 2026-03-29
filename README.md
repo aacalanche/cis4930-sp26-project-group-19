@@ -1,10 +1,7 @@
-> [!CAUTION]
-> This project is currently in development, and may contain errors.
-> Documentation is also a work in progress.
-
 ## About the group
 - **Ares Gregory** - FSU ID: KMG23G - Github: [@agregory-vhs](https://github.com/agregory-vhs)
 - **Arturo Calanche** - FSU ID: AAC21P - Github: [@aacalanche](https://github.com/aacalanche)
+- **Basma Belarj** - FSU ID: BHB22 - Github: [@basmabelarj24-coder](https://github.com/basmabelarj24-coder)
 - **Elias-Re Elradi** - FSU ID: EE23Q - Github: [@creasxo](https://github.com/creasxo)
 
 ## About the project
@@ -33,4 +30,11 @@ Totaling to 16 columns, 6 categorical and 10 numerical.
 
 ## Research questions
 > Do higher critic scores lead to higher global sales?
+> 
 > Which genres dominate each region?
+
+## Division of Work
+- **Ares Gregory:** data initialization, loading, cleaning. Github documentation.
+- **Arturo Calanche:** data visualization
+- **Basma Belarj:** 1 research question, `.loc`, `.iloc`, and `np.where()` functions, summary
+- **Elias-Re Elradi:** 2 research questions, EDA
