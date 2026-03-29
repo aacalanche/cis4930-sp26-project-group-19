@@ -32,9 +32,11 @@ Totaling to 16 columns, 6 categorical and 10 numerical.
 > Do higher critic scores lead to higher global sales?
 > 
 > Which genres dominate each region?
+> 
+> Are higher-selling games owned by certain publishers?
 
 ## Division of Work
-- **Ares Gregory:** data initialization, loading, cleaning. Github documentation.
+- **Ares Gregory:** data initialization, loading, cleaning, Github documentation
 - **Arturo Calanche:** data visualization
 - **Basma Belarj:** 1 research question, `.loc`, `.iloc`, and `np.where()` functions, summary
 - **Elias-Re Elradi:** 2 research questions, EDA
