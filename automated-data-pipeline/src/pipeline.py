@@ -33,23 +33,42 @@ def fetch_games(params):
     endpoint = "game" if id else "games"
 
     url = f"{BASE_URL}/{endpoint}"
-    response = requests.get(url, params=params, timeout=10)
-    
-    data = response.json()
-    status = response.status_code
-    response_url = response.url
 
-    return {
-        "data": data,
-        "status": status,
-        "url": response_url
-    }
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        return {
+            "data": data,
+            "status": response.status_code,
+            "url": response.url
+        }
+
+    except requests.exceptions.Timeout:
+        print("The request timed out.")
+        return {
+            "data": [],
+            "status": None,
+            "url": url
+        }
+
+    except requests.exceptions.RequestException as e:
+        print("Request error:", e)
+        return {
+            "data": [],
+            "status": None,
+            "url": url
+        }
+
 
 def parse_games(params):
     games = []
 
     result = fetch_games(params)
     data = result["data"]
+
+
 
     for game in data:
         record = {
