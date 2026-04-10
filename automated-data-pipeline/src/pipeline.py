@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 import argparse
+import sqlite3
+from pathlib import Path
 
 BASE_URL = "https://www.freetogame.com/api"
 TAGS = [
@@ -14,18 +16,27 @@ TAGS = [
 ]
 ORDERS = ["release-date", "popularity", "alphabetical", "relevance"]
 PLATFORMS = ["windows", "browser", "all"]
+DATA_DIR = Path("../data/processed")
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def validate_params(params) -> bool:
     id = params.get("id")
     if id and len(params) > 1:
         return False
 
-    for key, allowed in [("category", TAGS), ("sort-by", ORDERS), ("platform", PLATFORMS)]:
+    validations = [
+        ("category", TAGS),
+        ("sort-by", ORDERS),
+        ("platform", PLATFORMS)
+    ]
+    for key, allowed in validations:
         value = params.get(key)
         if value and value not in allowed:
             return False
-    
+
     return True
+
 
 def fetch_games(params):
     if not validate_params(params):
@@ -34,23 +45,41 @@ def fetch_games(params):
     endpoint = "game" if id else "games"
 
     url = f"{BASE_URL}/{endpoint}"
-    response = requests.get(url, params=params, timeout=10)
-    
-    data = response.json()
-    status = response.status_code
-    response_url = response.url
 
-    return {
-        "data": data,
-        "status": status,
-        "url": response_url
-    }
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        return {
+            "data": data,
+            "status": response.status_code,
+            "url": response.url
+        }
+
+    except requests.exceptions.Timeout:
+        print("The request timed out.")
+        return {
+            "data": [],
+            "status": None,
+            "url": url
+        }
+
+    except requests.exceptions.RequestException as e:
+        print("Request error:", e)
+        return {
+            "data": [],
+            "status": None,
+            "url": url
+        }
+
 
 def parse_games(params):
     games = []
 
     result = fetch_games(params)
     data = result["data"]
+
 
     for game in data:
         record = {
@@ -64,6 +93,7 @@ def parse_games(params):
         games.append(record)
 
     return games
+
 
 def parse_category_list(categories, params):
     all_games = []
@@ -82,6 +112,33 @@ def parse_args():
     parser.add_argument("--sort-by", choices=ORDERS, default="alphabetical", dest="sort_by")
     return parser.parse_args()
 
+def load_to_sqlite(df: pd.DataFrame) -> None:
+    db_path = DATA_DIR / "games.db"
+    conn = sqlite3.connect(db_path)
+
+    df = df.drop_duplicates(subset=["id"])
+
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' "
+        "AND name='games'"
+    )
+    table_exists = cursor.fetchone()
+
+    if table_exists:
+        query = "SELECT id FROM games"
+        existing_ids = pd.read_sql_query(query, conn)['id'].tolist()
+        df = df[~df['id'].isin(existing_ids)]
+
+    if not df.empty:
+        df.to_sql("games", conn, if_exists="append", index=False)
+
+    report = pd.read_sql("SELECT COUNT(*) AS total_records FROM games", conn)
+    print(report)
+
+    conn.close()
+
+
 def main():
     args = parse_args()
     params = {"platform": args.platform, "sort-by": args.sort_by}
@@ -92,8 +149,13 @@ def main():
     else:
         params["category"] = categories[0]
         games = parse_games(params)
+
     df_games = pd.DataFrame(games)
+    df_games = df_games.drop_duplicates(subset=["id"])
     print(df_games.head(10))
+
+    load_to_sqlite(df_games)
+
 
 if __name__ == "__main__":
     main()
