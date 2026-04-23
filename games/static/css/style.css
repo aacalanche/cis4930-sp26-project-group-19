@@ -1,13 +1,13 @@
-/* GameVault | CIS 4930 Group 19 */
+/* Games - CIS 4930 Group 19 */
 
 :root{
-    --gv-bg:        #0d0f14;
-    --gv-surface:   #161a24;
-    --gv-surface-2: #1e2433;
-    --gv-border:    #2a3048;
-    --gv-accent:    #e63946;
-    --gv-text:      #e8eaf0;
-    --gv-muted:     #7a849a;
+    --gv-bg:#0d0f14;
+    --gv-surface:#161a24;
+    --gv-surface-2:#1e2433;
+    --gv-border:#2a3048;
+    --gv-accent:#e63946;
+    --gv-text:#e8eaf0;
+    --gv-muted:#7a849a;
   }
   
   /* 1. dark background and font */
