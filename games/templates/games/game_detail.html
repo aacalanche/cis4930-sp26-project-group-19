@@ -1,0 +1,33 @@
+{% extends "games/base.html" %}
+
+{% block content %}
+<h2>{{ game.title }}</h2>
+
+<p><a href="{% url 'game_edit' game.pk %}">Edit</a> | <a href="{% url 'game_delete' game.pk %}">Delete</a> | <a href="{% url 'game_list' %}">Back to List</a></p>
+
+<h3>Basic Info</h3>
+<ul>
+    <li><strong>Genre:</strong> {{ game.genre.name }}</li>
+    <li><strong>Publisher:</strong> {{ game.publisher.name }}</li>
+    <li><strong>Platform:</strong> {{ game.platform }}</li>
+    <li><strong>Year of Release:</strong> {{ game.release_date|default:"N/A" }}</li>
+    <li><strong>Developer:</strong> {{ game.developer }}</li>
+    <li><strong>Rating:</strong> {{ game.rating }}</li>
+    <li><strong>Source:</strong> {{ game.source }}</li>
+</ul>
+
+<h3>Sales (in millions)</h3>
+<ul>
+    <li><strong>NA Sales:</strong> {{ game.na_sales|default:0 }}</li>
+    <li><strong>EU Sales:</strong> {{ game.eu_sales|default:0 }}</li>
+    <li><strong>JP Sales:</strong> {{ game.jp_sales|default:0 }}</li>
+    <li><strong>Other Sales:</strong> {{ game.other_sales|default:0 }}</li>
+    <li><strong>Global Sales:</strong> {{ game.global_sales|default:0 }}</li>
+</ul>
+
+<h3>Scores</h3>
+<ul>
+    <li><strong>Critic Score:</strong> {{ game.critic_score|default:"N/A" }} ({{ game.critic_count|default:0 }} reviews)</li>
+    <li><strong>User Score:</strong> {{ game.user_score|default:"N/A" }} ({{ game.user_count|default:0 }} reviews)</li>
+</ul>
+{% endblock %}

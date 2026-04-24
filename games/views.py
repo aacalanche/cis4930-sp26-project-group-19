@@ -1,7 +1,50 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Game, Genre, Publisher
+from .forms import GameForm
 
-# Create your views here.
-from django.shortcuts import render
+
 def home(request):
-    context = {"message": "This came from the view."}
-    return render(request, "games/home.html", context)
+    return render(request, "games/home.html")
+
+
+class GameListView(ListView):
+    model = Game
+    template_name = "games/game_list.html"
+    context_object_name = "games"
+    paginate_by = 20
+    
+
+class GameDetailView(DetailView):
+    model = Game
+    template_name = "games/game_detail.html"
+    context_object_name = "game"
+
+
+class GameCreateView(CreateView):
+    model = Game
+    form_class = GameForm
+    template_name = "games/game_form.html"
+    success_url = reverse_lazy('game_list')
+
+
+class GameUpdateView(UpdateView):
+    model = Game
+    form_class = GameForm
+    template_name = "games/game_form.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('game_detail', kwargs={'pk': self.object.pk})
+
+
+class GameDeleteView(DeleteView):
+    model = Game
+    template_name = "games/game_confirm_delete.html"
+    success_url = reverse_lazy('game_list')
+
+
+def analytics(request):
+    # Placeholder for analytics view - can be expanded with actual analytics logic
+    
+    return render(request, "games/analytics.html")

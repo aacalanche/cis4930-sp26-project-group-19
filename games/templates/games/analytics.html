@@ -1,0 +1,68 @@
+{% extends "games/base.html" %}
+
+{% block content %}
+<h2>Analytics Dashboard</h2>
+
+<p><a href="{% url 'game_list' %}">Back to Game List</a></p>
+
+<h3>Overview</h3>
+<ul>
+    <li><strong>Total Games:</strong> {{ total_games }}</li>
+    <li><strong>Total Global Sales:</strong> {{ total_global_sales }} million</li>
+    <li><strong>Average Critic Score:</strong> {{ avg_critic_score }}</li>
+    <li><strong>Average User Score:</strong> {{ avg_user_score }}</li>
+</ul>
+
+<h3>Top 10 Games by Global Sales</h3>
+<ol>
+    {% for game in top_games %}
+    <li>{{ game.title }} ({{ game.platform }}) - {{ game.global_sales }}M</li>
+    {% empty %}
+    <li>No data available</li>
+    {% endfor %}
+</ol>
+
+<h3>Sales by Genre</h3>
+<ul>
+    {% for item in sales_by_genre %}
+    <li>{{ item.genre__name }}: {{ item.total_sales }}M</li>
+    {% empty %}
+    <li>No data available</li>
+    {% endfor %}
+</ul>
+
+<h3>Sales by Platform</h3>
+<ul>
+    {% for item in sales_by_platform %}
+    <li>{{ item.platform }}: {{ item.total_sales }}M</li>
+    {% empty %}
+    <li>No data available</li>
+    {% endfor %}
+</ul>
+
+<h3>Top Publishers</h3>
+<ul>
+    {% for pub in top_publishers %}
+    <li>{{ pub.publisher__name }}: {{ pub.total_sales }}M ({{ pub.game_count }} games)</li>
+    {% empty %}
+    <li>No data available</li>
+    {% endfor %}
+</ul>
+
+<h3>Regional Sales</h3>
+<ul>
+    <li><strong>North America:</strong> {{ regional_sales.na_sales }}M</li>
+    <li><strong>Europe:</strong> {{ regional_sales.eu_sales }}M</li>
+    <li><strong>Japan:</strong> {{ regional_sales.jp_sales }}M</li>
+    <li><strong>Other:</strong> {{ regional_sales.other_sales }}M</li>
+</ul>
+
+<h3>Games by Rating</h3>
+<ul>
+    {% for item in games_by_rating %}
+    <li>{{ item.rating }}: {{ item.count }} games</li>
+    {% empty %}
+    <li>No data available</li>
+    {% endfor %}
+</ul>
+{% endblock %}

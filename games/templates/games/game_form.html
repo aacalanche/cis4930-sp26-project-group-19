@@ -1,0 +1,96 @@
+{% extends "games/base.html" %}
+
+{% block content %}
+<h2>{% if object %}Edit Game{% else %}Add New Game{% endif %}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <p>
+        <label>Title:</label><br>
+        {{ form.title }}
+        {% if form.title.errors %}{{ form.title.errors }}{% endif %}
+    </p>
+    
+    <p>
+        <label>Genre:</label><br>
+        {{ form.genre }}
+        {% if form.genre.errors %}{{ form.genre.errors }}{% endif %}
+    </p>
+    
+    <p>
+        <label>Publisher:</label><br>
+        {{ form.publisher }}
+        {% if form.publisher.errors %}{{ form.publisher.errors }}{% endif %}
+    </p>
+
+    <p>
+        <label>Developer:</label><br>
+        {{ form.developer }}
+        {% if form.developer.errors %}{{ form.developer.errors }}{% endif %}
+    </p>
+
+    <p>
+        <label>Platform:</label><br>
+        {{ form.platform }}
+        {% if form.platform.errors %}{{ form.platform.errors }}{% endif %}
+    </p>
+    
+    <p>
+        <label>Year of Release:</label><br>
+        {{ form.release_date }}
+        {% if form.release_date.errors %}{{ form.release_date.errors }}{% endif %}
+    </p>
+    
+    <h3>Sales (in millions)</h3>
+    <p>
+        <label>NA Sales:</label> {{ form.na_sales }}
+        {% if form.na_sales.errors %}{{ form.na_sales.errors }}{% endif %}
+    </p>
+    <p>
+        <label>EU Sales:</label> {{ form.eu_sales }}
+        {% if form.eu_sales.errors %}{{ form.eu_sales.errors }}{% endif %}
+    </p>
+    <p>
+        <label>JP Sales:</label> {{ form.jp_sales }}
+        {% if form.jp_sales.errors %}{{ form.jp_sales.errors }}{% endif %}
+    </p>
+    <p>
+        <label>Other Sales:</label> {{ form.other_sales }}
+        {% if form.other_sales.errors %}{{ form.other_sales.errors }}{% endif %}
+    </p>
+    <p>
+        <label>Global Sales:</label> {{ form.global_sales }}
+        {% if form.global_sales.errors %}{{ form.global_sales.errors }}{% endif %}
+    </p>
+    
+    <h3>Scores</h3>
+    <p>
+        <label>Critic Score:</label> {{ form.critic_score }}
+        {% if form.critic_score.errors %}{{ form.critic_score.errors }}{% endif %}
+    </p>
+    <p>
+        <label>Critic Count:</label> {{ form.critic_count }}
+        {% if form.critic_count.errors %}{{ form.critic_count.errors }}{% endif %}
+    </p>
+    <p>
+        <label>User Score:</label> {{ form.user_score }}
+        {% if form.user_score.errors %}{{ form.user_score.errors }}{% endif %}
+    </p>
+    <p>
+        <label>User Count:</label> {{ form.user_count }}
+        {% if form.user_count.errors %}{{ form.user_count.errors }}{% endif %}
+    </p>
+    
+    <h3>Additional Info</h3>
+    <p>
+        <label>Rating:</label> {{ form.rating }}
+        {% if form.rating.errors %}{{ form.rating.errors }}{% endif %}
+    </p>
+    
+    <p>
+        <button type="submit">Save</button>
+        <a href="{% url 'game_list' %}">Cancel</a>
+    </p>
+</form>
+{% endblock %}
